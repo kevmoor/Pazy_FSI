@@ -1,0 +1,7 @@
+*.DS_Store
+*.sum*
+*.out
+*.outb
+*.log
+*vtk*
+*.ech
