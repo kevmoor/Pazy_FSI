@@ -1,0 +1,1 @@
+/opt/homebrew/bin/gfortran  -ffree-line-length-none -fdefault-real-8 -C -DIMPLICIT_DLLEXPORT -O3 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk -dynamiclib -Wl,-headerpad_max_install_names -o DISCON.dll -install_name @rpath/DISCON.dll CMakeFiles/DISCON.dir/DISCON.F90.o
