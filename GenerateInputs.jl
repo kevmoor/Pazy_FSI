@@ -52,16 +52,16 @@ pazy_inertia_w_skin = [1	0.019118611	-6.09116E-06	0.006442847	-2.71488E-05	6.631
 span_measured = [0, 0.038249998, 0.076499998, 0.114749997, 0.152999996, 0.191249995, 0.229499995, 0.267749994, 0.305999993, 0.344249993, 0.382499992, 0.420749991, 0.45899999, 0.49724999, 0.530718683, 0.549843728]
 spanlen = diff(span_measured)
 spanlen = [spanlen; spanlen[end]]
-mass_measured = pazy_inertia_w_skin[:,2]
+mass_measured = pazy_inertia_w_skin[:,2]./spanlen
 cgx_measured = pazy_inertia_w_skin[:,3]
 cgy_measured = pazy_inertia_w_skin[:,4]
 cgz_measured = pazy_inertia_w_skin[:,5]
-Ixx_measured = pazy_inertia_w_skin[:,6]
-Iyy_measured = pazy_inertia_w_skin[:,7]
-Izz_measured = pazy_inertia_w_skin[:,8]
-Ixy_measured = pazy_inertia_w_skin[:,9]
-Ixz_measured = pazy_inertia_w_skin[:,10]
-Iyz_measured = pazy_inertia_w_skin[:,11]
+Ixx_measured = pazy_inertia_w_skin[:,6]./spanlen
+Iyy_measured = pazy_inertia_w_skin[:,7]./spanlen
+Izz_measured = pazy_inertia_w_skin[:,8]./spanlen
+Ixy_measured = pazy_inertia_w_skin[:,9]./spanlen
+Ixz_measured = pazy_inertia_w_skin[:,10]./spanlen
+Iyz_measured = pazy_inertia_w_skin[:,11]./spanlen
 
 # Spline onto the beamdyn 
 mass_spl = FLOWMath.akima(span_measured,mass_measured,spanBD)
@@ -74,6 +74,67 @@ Izz_spl_tmp = FLOWMath.akima(span_measured,Izz_measured,spanBD)
 Ixy_spl_tmp = FLOWMath.akima(span_measured,Ixy_measured,spanBD)
 Ixz_spl_tmp = FLOWMath.akima(span_measured,Ixz_measured,spanBD)
 Iyz_spl_tmp = FLOWMath.akima(span_measured,Iyz_measured,spanBD)
+
+
+PyPlot.figure()
+PyPlot.plot(span_measured,mass_measured,".-",label="Input")
+PyPlot.plot(spanBD,mass_spl,".-",label="Spline")
+PyPlot.ylabel("mass")
+PyPlot.legend()
+
+PyPlot.figure()
+PyPlot.plot(span_measured,cgx_measured,".-",label="Input")
+PyPlot.plot(spanBD,cgx_spl_tmp,".-",label="Spline")
+PyPlot.ylabel("cgx")
+PyPlot.legend()
+
+PyPlot.figure()
+PyPlot.plot(span_measured,cgy_measured,".-",label="Input")
+PyPlot.plot(spanBD,cgy_spl_tmp,".-",label="Spline")
+PyPlot.ylabel("cgy")
+PyPlot.legend()
+
+PyPlot.figure()
+PyPlot.plot(span_measured,cgz_measured,".-",label="Input")
+PyPlot.plot(spanBD,cgz_spl_tmp,".-",label="Spline")
+PyPlot.ylabel("cgz")
+PyPlot.legend()
+
+PyPlot.figure()
+PyPlot.plot(span_measured,Ixx_measured,".-",label="Input")
+PyPlot.plot(spanBD,Ixx_spl_tmp,".-",label="Spline")
+PyPlot.ylabel("Ixx")
+PyPlot.legend()
+
+PyPlot.figure()
+PyPlot.plot(span_measured,Iyy_measured,".-",label="Input")
+PyPlot.plot(spanBD,Iyy_spl_tmp,".-",label="Spline")
+PyPlot.ylabel("Iyy")
+PyPlot.legend()
+
+PyPlot.figure()
+PyPlot.plot(span_measured,Izz_measured,".-",label="Input")
+PyPlot.plot(spanBD,Izz_spl_tmp,".-",label="Spline")
+PyPlot.ylabel("Izz")
+PyPlot.legend()
+
+PyPlot.figure()
+PyPlot.plot(span_measured,Ixy_measured,".-",label="Input")
+PyPlot.plot(spanBD,Ixy_spl_tmp,".-",label="Spline")
+PyPlot.ylabel("Ixy")
+PyPlot.legend()
+
+PyPlot.figure()
+PyPlot.plot(span_measured,Ixz_measured,".-",label="Input")
+PyPlot.plot(spanBD,Ixz_spl_tmp,".-",label="Spline")
+PyPlot.ylabel("Ixz")
+PyPlot.legend()
+
+PyPlot.figure()
+PyPlot.plot(span_measured,Iyz_measured,".-",label="Input")
+PyPlot.plot(spanBD,Iyz_spl_tmp,".-",label="Spline")
+PyPlot.ylabel("Iyz")
+PyPlot.legend()
 
 # BeamDyn defines x as upward (edgewise rotation), y as downstream (flapwise rotation), and z and span (torsion)
 
@@ -123,16 +184,16 @@ pazy_stiffness_w_skin = [1	9794492.59	7.58259714	5.24743501	3317.57932	-0.569828
 16	10019632.8	17.3730728	4.77037999	3373.72291	6.1133995	-2.28331802	54451.9115	-1.39455813	0.424981724	-0.114249441]
 
 # span_measured # already defined
-K11_measured = pazy_stiffness_w_skin[:,2] ./spanlen# axial stiffness
-K22_measured = pazy_stiffness_w_skin[:,3] ./spanlen# torsional stiffness
-K33_measured = pazy_stiffness_w_skin[:,4] ./spanlen# out of plane bending stiffness (flap bending)
-K44_measured = pazy_stiffness_w_skin[:,5] ./spanlen# in plane bending stiffness (edge bending)
-K12_measured = pazy_stiffness_w_skin[:,6] ./spanlen# axial torsion coupling
-K13_measured = pazy_stiffness_w_skin[:,7] ./spanlen# axial out-of-plane coupling 
-K14_measured = pazy_stiffness_w_skin[:,8] ./spanlen# axial in-plane coupling
-K23_measured = pazy_stiffness_w_skin[:,9] ./spanlen# torsion out-of-plane coupling
-K24_measured = pazy_stiffness_w_skin[:,10]./spanlen # torsion in-plane coupling
-K34_measured = pazy_stiffness_w_skin[:,11]./spanlen # out-of-plane in-plane coupling
+K11_measured = pazy_stiffness_w_skin[:,2] #./spanlen# axial stiffness
+K22_measured = pazy_stiffness_w_skin[:,3] #./spanlen# torsional stiffness
+K33_measured = pazy_stiffness_w_skin[:,4] #./spanlen# out of plane bending stiffness (flap bending)
+K44_measured = pazy_stiffness_w_skin[:,5] #./spanlen# in plane bending stiffness (edge bending)
+K12_measured = pazy_stiffness_w_skin[:,6] #./spanlen# axial torsion coupling
+K13_measured = pazy_stiffness_w_skin[:,7] #./spanlen# axial out-of-plane coupling 
+K14_measured = pazy_stiffness_w_skin[:,8] #./spanlen# axial in-plane coupling
+K23_measured = pazy_stiffness_w_skin[:,9] #./spanlen# torsion out-of-plane coupling
+K24_measured = pazy_stiffness_w_skin[:,10]#./spanlen # torsion in-plane coupling
+K34_measured = pazy_stiffness_w_skin[:,11]#./spanlen # out-of-plane in-plane coupling
 
 K11 = FLOWMath.akima(span_measured,K11_measured,spanBD)
 K22 = FLOWMath.akima(span_measured,K22_measured,spanBD)
@@ -145,10 +206,78 @@ K23 = FLOWMath.akima(span_measured,K23_measured,spanBD)
 K24 = FLOWMath.akima(span_measured,K24_measured,spanBD)
 K34 = FLOWMath.akima(span_measured,K34_measured,spanBD)
 
+
+PyPlot.figure()
+PyPlot.plot(span_measured,K11_measured,".-",label="Input")
+PyPlot.plot(spanBD,K11,".-",label="Spline")
+PyPlot.ylabel("K11")
+PyPlot.legend()
+
+
+PyPlot.figure()
+PyPlot.plot(span_measured,K22_measured,".-",label="Input")
+PyPlot.plot(spanBD,K22,".-",label="Spline")
+PyPlot.ylabel("K22")
+PyPlot.legend()
+
+
 PyPlot.figure()
 PyPlot.plot(span_measured,K33_measured,".-",label="Input")
 PyPlot.plot(spanBD,K33,".-",label="Spline")
+PyPlot.ylabel("K33")
 PyPlot.legend()
+
+
+PyPlot.figure()
+PyPlot.plot(span_measured,K44_measured,".-",label="Input")
+PyPlot.plot(spanBD,K44,".-",label="Spline")
+PyPlot.ylabel("K44")
+PyPlot.legend()
+
+
+PyPlot.figure()
+PyPlot.plot(span_measured,K12_measured,".-",label="Input")
+PyPlot.plot(spanBD,K12,".-",label="Spline")
+PyPlot.ylabel("K12")
+PyPlot.legend()
+
+
+PyPlot.figure()
+PyPlot.plot(span_measured,K13_measured,".-",label="Input")
+PyPlot.plot(spanBD,K13,".-",label="Spline")
+PyPlot.ylabel("K13")
+PyPlot.legend()
+
+
+PyPlot.figure()
+PyPlot.plot(span_measured,K14_measured,".-",label="Input")
+PyPlot.plot(spanBD,K14,".-",label="Spline")
+PyPlot.ylabel("K14")
+PyPlot.legend()
+
+
+PyPlot.figure()
+PyPlot.plot(span_measured,K23_measured,".-",label="Input")
+PyPlot.plot(spanBD,K23,".-",label="Spline")
+PyPlot.ylabel("K23")
+PyPlot.legend()
+
+
+PyPlot.figure()
+PyPlot.plot(span_measured,K24_measured,".-",label="Input")
+PyPlot.plot(spanBD,K24,".-",label="Spline")
+PyPlot.ylabel("K24")
+PyPlot.legend()
+
+
+PyPlot.figure()
+PyPlot.plot(span_measured,K34_measured,".-",label="Input")
+PyPlot.plot(spanBD,K34,".-",label="Spline")
+PyPlot.ylabel("K34")
+PyPlot.legend()
+
+
+
 
 #          s_flap    s_edge   axial   b_edge  b_flap  torsion        
 # s_flap  [ KShrFlp  0        0       0       0       0]
@@ -173,8 +302,8 @@ for ispan = 1:nBD
     @printf "\n"
     println(spanBD[ispan]/spanBD[end])
     # TODO: get the shear stiffnesses
-    stiffmatrix = [ K22[ispan]/10        0        0              0              0              0
-                            0 K22[ispan]/10         0              0              0              0
+    stiffmatrix = [ K11[ispan]/1000        0        0              0              0              0
+                            0 K11[ispan]/1000         0              0              0              0
                             0        0        K11[ispan]     K14[ispan]     K13[ispan]     K12[ispan]
                             0        0        K14[ispan]     K44[ispan]     K34[ispan]     K24[ispan]
                             0        0        K13[ispan]     K34[ispan]     K33[ispan]     K23[ispan]
