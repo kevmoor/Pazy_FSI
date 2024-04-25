@@ -8,8 +8,8 @@ True          QuasiStaticInit  - Use quasi-static pre-conditioning with centripe
 "DEFAULT"     refine           - Refinement factor for trapezoidal quadrature (-) [DEFAULT = 1; used only when quadrature=2]
 "DEFAULT"     n_fact           - Factorization frequency for the Jacobian in N-R iteration(-) [DEFAULT = 5]
 "DEFAULT"     DTBeam           - Time step size (s)
-"DEFAULT"     load_retries     - Number of factored load retries before quitting the simulation [DEFAULT = 20]
-"DEFAULT"     NRMax            - Max number of iterations in Newton-Raphson algorithm (-) [DEFAULT = 10]
+100     load_retries     - Number of factored load retries before quitting the simulation [DEFAULT = 20]
+100     NRMax            - Max number of iterations in Newton-Raphson algorithm (-) [DEFAULT = 10]
 "DEFAULT"     stop_tol         - Tolerance for stopping criterion (-) [DEFAULT = 1E-5]
 "DEFAULT"     tngt_stf_fd      - Use finite differenced tangent stiffness matrix? (flag)
 "DEFAULT"     tngt_stf_comp    - Compare analytical finite differenced tangent stiffness matrix? (flag)

@@ -29,20 +29,23 @@ for (iload,load) in enumerate(loads)
 
     loadN = load*gravity
     if !bendonly
-        moment = loadN*0.13/2
+        moment = loadN*0.11
     else
         moment = 0.0
     end
     # change the file
+    println("************************")
+    println("$iload of $N_loads")
     println(moment)
+    println("************************")
 
     input_string_array = "------- BEAMDYN Driver with OpenFAST INPUT FILE --------------------------------
 Static analysis of a twisted beam
 ---------------------- SIMULATION CONTROL --------------------------------------
 False         DynamicSolve  - Dynamic solve (false for static solve) (-)
           0   t_initial     - Starting time of simulation (s) [used only when DynamicSolve=TRUE]
-         30   t_final       - Ending time of simulation   (s) [used only when DynamicSolve=TRUE]
-      0.001   dt            - Time increment size         (s) [used only when DynamicSolve=TRUE]
+         1.0   t_final       - Ending time of simulation   (s) [used only when DynamicSolve=TRUE]
+      0.0001   dt            - Time increment size         (s) [used only when DynamicSolve=TRUE]
 ---------------------- GRAVITY PARAMETER --------------------------------------
       0.0   Gx            - Component of gravity vector along X direction (m/s^2)
           0   Gy            - Component of gravity vector along Y direction (m/s^2)
