@@ -16,7 +16,7 @@ import DelimitedFiles
 path = splitdir(@__FILE__)[1]
 
 
-loads = [0.2,0.4,0.6,1.0,1.5,2.0] #kg
+loads = [0.0,0.2,0.4,0.6,1.0,1.5,2.0] #kg
 N_loads = length(loads)
 gravity = 9.81
 bendonly = false
@@ -92,7 +92,11 @@ Non-dim blade-span eta   Fx          Fy            Fz           Mx           My 
         write(file, input_string_array)
     end
     # Run beamdyn for the given load with no torsion
-    run(`$path/../../openfast/build/modules/beamdyn/beamdyn_driver $path/bd_driver_script$iload.inp`)
+    try
+        run(`$path/../../openfast/build/modules/beamdyn/beamdyn_driver $path/bd_driver_script$iload.inp`)
+    catch
+        println("BD failed to run")
+    end
 
     # load in the result
     BD_data = DelimitedFiles.readdlm("$path/bd_driver_script$iload.out",skipstart=8)
@@ -149,3 +153,18 @@ else
                 
         
 end
+
+# for no load case - remember to run with the dynamic solve, and also to 
+alignment_x = [1,2,3,4,5]
+f_Hz = [4.93443966e+00,2.96798376e+01,4.92682701e+01,5.26229148e+01,
+8.30514800e+01]
+
+alignment_x_exp = [1,2,3,4,5]
+f_Hz_exp_upright = [4.26,28.5,42.0,60.7,81.5]
+
+PyPlot.figure()
+PyPlot.plot(alignment_x_exp,f_Hz_exp_upright,"k.",label="Exp.")
+PyPlot.plot(alignment_x,f_Hz,".",color=plot_cycle[1],label="BD")
+PyPlot.xlabel("Mode #")
+PyPlot.ylabel("Frequency (Hz)")
+PyPlot.legend()
